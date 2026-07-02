@@ -56,6 +56,7 @@ public struct Bottle: Identifiable, Codable, Hashable {
     public var useMsync: Bool // Mach semaphore synchronization
     public var useRetina: Bool // High-DPI scaling mode
     public var showMetalHUD: Bool // MTL_HUD_ENABLED overlay
+    public var useRepackCompatMode: Bool // Repack & Large Address Aware compatibility
     
     public var gptkInjected: Bool
     public var createdDate: Date
@@ -73,6 +74,7 @@ public struct Bottle: Identifiable, Codable, Hashable {
         useMsync: Bool = true,
         useRetina: Bool = true,
         showMetalHUD: Bool = false,
+        useRepackCompatMode: Bool = true,
         gptkInjected: Bool = false,
         createdDate: Date = Date(),
         installedApps: [InstalledApp] = []
@@ -88,6 +90,7 @@ public struct Bottle: Identifiable, Codable, Hashable {
         self.useMsync = useMsync
         self.useRetina = useRetina
         self.showMetalHUD = showMetalHUD
+        self.useRepackCompatMode = useRepackCompatMode
         self.gptkInjected = gptkInjected
         self.createdDate = createdDate
         self.installedApps = installedApps

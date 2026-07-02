@@ -40,6 +40,13 @@ public class WineEnvironmentManager {
         env["MTL_HUD_ENABLED"] = bottle.showMetalHUD ? "1" : "0"
         env["WINE_SIMULATE_VIRTUAL_DESKTOP"] = "off"
         
+        // Repack & Installer Memory/Stack Compatibility Mode
+        if bottle.useRepackCompatMode {
+            env["WINE_LARGE_ADDRESS_AWARE"] = "1"
+            env["WINE_HEAP_TAIL_CHECK"] = "disable"
+            env["WINEDEBUG"] = "-all"
+        }
+        
         // Linker & Library Paths
         var fallbackLibs: [String] = []
         var fallbackFrameworks: [String] = []

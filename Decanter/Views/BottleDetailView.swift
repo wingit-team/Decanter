@@ -187,6 +187,20 @@ public struct BottleDetailView: View {
                                     }
                                 )
                             )
+                            
+                            ToggleCard(
+                                title: "Installer / Repack Fix Mode",
+                                subtitle: "Enables LAA 4GB memory & stack protection for DODI/FitGirl setup.exe repacks",
+                                icon: "shield.fill",
+                                color: .yellow,
+                                isOn: Binding(
+                                    get: { bottle.useRepackCompatMode },
+                                    set: { val in
+                                        bottle.useRepackCompatMode = val
+                                        bottleManager.updateBottle(bottle)
+                                    }
+                                )
+                            )
                         }
                     }
                     
