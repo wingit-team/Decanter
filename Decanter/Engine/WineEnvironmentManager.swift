@@ -18,6 +18,11 @@ public class WineEnvironmentManager {
         env["WINEPREFIX"] = bottle.path
         env["WINEARCH"] = bottle.arch
         
+        // Temporary Directory Isolation for Wineserver Sockets
+        let bottleTmp = (bottle.path as NSString).appendingPathComponent("tmp")
+        try? FileManager.default.createDirectory(atPath: bottleTmp, withIntermediateDirectories: true)
+        env["TMPDIR"] = bottleTmp
+        
         // Synchronization Protocol Flags
         if bottle.useEsync {
             env["WINEESYNC"] = "1"
