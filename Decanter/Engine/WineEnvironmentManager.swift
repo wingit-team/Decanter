@@ -47,6 +47,35 @@ public class WineEnvironmentManager {
             env["WINEDEBUG"] = "-all"
         }
         
+        // Dynamic DLL Overrides based on selected graphics backend & mode
+        var overrides: [String] = []
+        if bottle.useD3DMetal {
+            overrides.append("d3d11=n,b")
+            overrides.append("d3d12=n,b")
+            overrides.append("d3d9=n,b")
+            overrides.append("dxgi=n,b")
+            overrides.append("d3dmetal=n,b")
+        } else if bottle.useDXVK {
+            overrides.append("d3d11=n,b")
+            overrides.append("d3d10core=n,b")
+            overrides.append("d3d9=n,b")
+            overrides.append("dxgi=n,b")
+        }
+        
+        if bottle.useRepackCompatMode {
+            overrides.append("mscoree=b")
+            overrides.append("mshtml=b")
+        }
+        
+        if !overrides.isEmpty {
+            let existingOverrides = env["WINEDLLOVERRIDES"] ?? ""
+            if existingOverrides.isEmpty {
+                env["WINEDLLOVERRIDES"] = overrides.joined(separator: ";")
+            } else {
+                env["WINEDLLOVERRIDES"] = existingOverrides + ";" + overrides.joined(separator: ";")
+            }
+        }
+        
         // Linker & Library Paths
         var fallbackLibs: [String] = []
         var fallbackFrameworks: [String] = []
