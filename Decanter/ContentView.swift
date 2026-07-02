@@ -102,11 +102,11 @@ public struct ContentView: View {
             // ── Detail Pane ──────────────────────────────────────────────────
             switch selection {
             case .bottle(let bottleID):
-                if let index = bottleManager.bottles.firstIndex(where: { $0.id == bottleID }) {
+                if bottleManager.bottles.contains(where: { $0.id == bottleID }) {
                     BottleDetailView(
                         bottleManager: bottleManager,
                         setupManager: setupManager,
-                        bottle: $bottleManager.bottles[index]
+                        bottle: bottleManager.binding(for: bottleID)
                     )
                 } else {
                     EmptySelectionView(showCreateSheet: $showCreateBottleSheet)
@@ -116,18 +116,11 @@ public struct ContentView: View {
                 SettingsView(bottleManager: bottleManager, setupManager: setupManager)
                 
             case nil:
-                if let first = bottleManager.bottles.first {
+                if let firstID = bottleManager.bottles.first?.id {
                     BottleDetailView(
                         bottleManager: bottleManager,
                         setupManager: setupManager,
-                        bottle: Binding(
-                            get: { self.bottleManager.bottles.first(where: { $0.id == first.id }) ?? first },
-                            set: { updated in
-                                if let idx = self.bottleManager.bottles.firstIndex(where: { $0.id == first.id }) {
-                                    self.bottleManager.bottles[idx] = updated
-                                }
-                            }
-                        )
+                        bottle: bottleManager.binding(for: firstID)
                     )
                 } else {
                     EmptySelectionView(showCreateSheet: $showCreateBottleSheet)

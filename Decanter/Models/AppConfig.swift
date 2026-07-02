@@ -17,7 +17,7 @@ public struct AppConfig: Codable {
         return appSupport.appendingPathComponent("Decanter/Bottles").path
     }
     
-    public static var defaultWinePath: String {
+    nonisolated public static var defaultWinePath: String {
         let candidates = [
             "/opt/homebrew/bin/wine",
             "/usr/local/bin/wine",

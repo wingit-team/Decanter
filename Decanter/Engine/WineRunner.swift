@@ -5,6 +5,7 @@
 
 import Foundation
 
+@MainActor
 public class WineRunner {
     public static let shared = WineRunner()
     
@@ -49,7 +50,9 @@ public class WineRunner {
         
         return try await withCheckedThrowingContinuation { continuation in
             process.terminationHandler = { [weak self] proc in
-                self?.activeProcesses.removeValue(forKey: processID)
+                Task { @MainActor in
+                    self?.activeProcesses.removeValue(forKey: processID)
+                }
                 logHandler("\n[Decanter] Process terminated with exit code \(proc.terminationStatus).\n")
                 continuation.resume(returning: ())
             }
@@ -57,7 +60,7 @@ public class WineRunner {
             do {
                 try process.run()
             } catch {
-                self.activeProcesses.removeValue(forKey: processID)
+                activeProcesses.removeValue(forKey: processID)
                 logHandler("[Decanter Error] Failed to start process: \(error.localizedDescription)\n")
                 continuation.resume(throwing: error)
             }

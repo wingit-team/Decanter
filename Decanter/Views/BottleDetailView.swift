@@ -288,7 +288,7 @@ public struct BottleDetailView: View {
                         }
                         .frame(height: 160)
                         .background(Color.black)
-                        .onChange(of: consoleLogs) { _ in
+                        .onChange(of: consoleLogs) {
                             proxy.scrollTo("bottomLog", anchor: .bottom)
                         }
                     }

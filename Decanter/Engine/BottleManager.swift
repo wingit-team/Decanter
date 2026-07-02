@@ -5,13 +5,29 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
+@MainActor
 public class BottleManager: ObservableObject {
     @Published public var bottles: [Bottle] = []
     @Published public var selectedBottleID: UUID? = nil
     @Published public var config: AppConfig
     
     private let fm = FileManager.default
+    
+    public func binding(for bottleID: UUID) -> Binding<Bottle> {
+        Binding(
+            get: {
+                self.bottles.first(where: { $0.id == bottleID }) ?? Bottle(name: "Placeholder", path: "")
+            },
+            set: { updated in
+                if let index = self.bottles.firstIndex(where: { $0.id == bottleID }) {
+                    self.bottles[index] = updated
+                    self.saveBottleMetadata(updated)
+                }
+            }
+        )
+    }
     
     public var selectedBottle: Bottle? {
         get {
